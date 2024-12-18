@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Imprimir Pedido</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="mb-4">Imprimir Pedido</h1>
+        <p><strong>ID do Pedido:</strong> {{ pedido[0] }}</p>
+        <p><strong>Cliente:</strong> {{ pedido[1] }}</p>
+        <p><strong>Telefone:</strong> {{ pedido[2] }}</p>
+        <p><strong>Produto:</strong> {{ pedido[3] }}</p>
+        <p><strong>Descrição:</strong> {{ pedido[4] }}</p>
+        <p><strong>Data de Retirada/Entrega:</strong> {{ pedido[5] }}</p>
+        <p><strong>Tipo de Entrega:</strong> {{ pedido[6] }}</p>
+        <p><strong>Endereço de Entrega:</strong> {{ pedido[7] if pedido[7] else 'N/A' }}</p>
+        <p><strong>Status:</strong> {{ pedido[8] }}</p>
+        <p><strong>Usuário:</strong> {{ pedido[9] }}</p>
+        <button class="btn btn-primary" onclick="window.print()">Imprimir</button>
+        <a class="btn btn-secondary" href="{{ url_for('pedidos_lista') }}">Voltar</a>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

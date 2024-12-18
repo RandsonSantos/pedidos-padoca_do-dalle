@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Adicionar Pedido{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Adicionar Pedido</h1>
+    <form method="POST">
+        <div class="form-group">
+            <label for="cliente">Cliente</label>
+            <input type="text" class="form-control" id="cliente" name="cliente" required>
+        </div>
+        <div class="form-group">
+            <label for="telefone">Telefone</label>
+            <input type="text" class="form-control" id="telefone" name="telefone" required>
+        </div>
+        <div class="form-group">
+            <label for="produto_id">Produto</label>
+            <select class="form-control" id="produto_id" name="produto_id" required>
+                {% for produto in produtos %}
+                <option value="{{ produto[0] }}">{{ produto[1] }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="descricao">Descrição do Pedido</label>
+            <textarea class="form-control" id="descricao" name="descricao" rows="3" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="data_retirada_entrega">Data Retirada/Entrega</label>
+            <input type="date" class="form-control" id="data_retirada_entrega" name="data_retirada_entrega" required>
+        </div>
+        <div class="form-group">
+            <label for="tipo_entrega">Tipo de Entrega</label>
+            <select class="form-control" id="tipo_entrega" name="tipo_entrega" required>
+                <option value="Retirada">Retirada</option>
+                <option value="Entrega">Entrega</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="endereco_entrega">Endereço de Entrega</label>
+            <input type="text" class="form-control" id="endereco_entrega" name="endereco_entrega">
+        </div>
+        <div class="form-group">
+            <label for="status">Status</label>
+            <select class="form-control" id="status" name="status" required>
+                <option value="Pendente">Pendente</option>
+                <option value="Concluído">Concluído</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Adicionar Pedido</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Página Inicial{% endblock %}
+{% block content %}
+<div class="jumbotron">
+    <h1 class="display-4">Sistema de Controle de Pedidos</h1>
+    <p class="lead">Este sistema foi desenvolvido para ajudar empresas a gerenciar seus pedidos de maneira eficiente e organizada.</p>
+    <hr class="my-4">
+    <p>Com nosso sistema, você pode:</p>
+    <ul>
+        <li>Registrar novos pedidos</li>
+        <li>Acompanhar o status dos pedidos</li>
+        <li>Gerenciar seus produtos</li>
+        <li>Obter relatórios detalhados</li>
+    </ul>
+    <a class="btn btn-success btn-lg" href="{{ url_for('add_pedido') }}" role="button">Fazer Pedido</a>
+
+</div>
+{% endblock %}

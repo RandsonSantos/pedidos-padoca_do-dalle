@@ -1,0 +1,213 @@
+Pedido realizado com sucesso! Aguarde confirmação no whatsapp
+
+
+
+{% if pedido_realizado %}
+    <div class="alert alert-success mt-3">Pedido realizado com sucesso! Aguarde confirmação no whatsapp</div>
+{% endif %}
+
+<h2>Escolha o que deseja imprimir:</h2>
+<div class="d-flex justify-content-around mb-4">
+    <a href="{{ url_for('print_all_produtos') }}" class="btn btn-info btn-lg" target="_blank">Imprimir Todos os Produtos</a>
+    <a href="{{ url_for('print_all_pedidos') }}" class="btn btn-primary btn-lg" target="_blank">Imprimir Todos os Pedidos</a>
+</div>
+
+def get_empresa():
+    conn = sqlite3.connect('db.sqlite3')
+    c = conn.cursor()
+    c.execute('SELECT * FROM empresa WHERE id = 1')
+    empresa = c.fetchone()
+    conn.close()
+    return empresa
+
+
+    <div class="form-group">
+        <label for="status">Status</label>
+        <select class="form-control" name="status" required>
+            <option value="Pendente">Pendente</option>
+            <option value="Em Andamento">Em Andamento</option>
+            <option value="Concluído">Concluído</option>
+            <option value="Cancelado">Cancelado</option>
+        </select>
+    </div>
+
+
+
+
+
+    <a class="btn btn-success btn-lg" href="{{ url_for('add_pedido') }}" role="button">Fazer Pedido</a>
+
+    
+    <div class="form-group">
+        <label for="data_retirada_entrega">Data Retirada/Entrega</label>
+        <input type="date" class="form-control" id="data_retirada_entrega" name="data_retirada_entrega" required>
+    </div>
+
+
+
+
+    {% extends "base.html" %}
+{% block title %}Detalhes do Pedido{% endblock %}
+{% block content %}
+<h1 class="mt-4">Detalhes do Pedido</h1>
+<div class="card">
+    <div class="card-body">
+        <p><strong>Cliente:</strong> {{ pedido['cliente'] }}</p>
+        <p><strong>Telefone WhatsApp:</strong> {{ pedido['telefone'] }}</p>
+        <p><strong>Produto:</strong> {{ pedido['produto_nome'] }}</p>
+        <p><strong>descricao:</strong> {{ pedido['descricao'] }}</p>
+        <p><strong>Data de Retirada/Entrega:</strong> {{ pedido['data_retirada_entrega'] }}</p>
+        <p><strong>Tipo de Entrega:</strong> {{ pedido['tipo_entrega'] }}</p>
+        <p><strong>Endereço de Entrega:</strong> {{ pedido['endereco_entrega'] if pedido['endereco_entrega'] else 'N/A' }}</p>
+        <p><strong>Status:</strong> {{ pedido['status'] }}</p>
+        <a href="{{ url_for('pedidos_lista') }}" class="btn btn-primary">Voltar</a>
+        <a href="{{ url_for('editar_pedido', pedido_id=pedido['id']) }}" class="btn btn-warning">Editar</a>
+        <a href="{{ url_for('print_pedido', pedido_id=pedido['id']) }}" class="btn btn-info" target="_blank">Imprimir</a>
+    </div>
+</div>
+{% endblock %}
+
+<a href="{{ url_for('print_all_produtos') }}" class="btn btn-info mb-3" target="_blank">Imprimir Todos os Produtos</a>
+
+
+<a class="btn btn-secondary" href="{{ url_for('imprimir_pedido', pedido_id=pedido[0]) }}">Imprimir</a>
+
+def get_produtos(): ### MOSTRAR TODOS OS PRODUTOS
+    conn = sqlite3.connect('db.sqlite3')
+    c = conn.cursor()
+    c.execute('SELECT id, nome FROM produtos')
+    produtos = c.fetchall()
+    conn.close()
+    return produtos
+    @app.route('/print_all_produtos', methods=['GET'])
+@login_required
+def print_all_produtos():
+    conn = sqlite3.connect('db.sqlite3')
+    c = conn.cursor()
+    c.execute('SELECT id, nome, descricao, preco, ativo FROM produtos')
+    produtos = c.fetchall()
+    conn.close()
+
+    pdf = generate_all_products_pdf(produtos)
+
+    return send_file(io.BytesIO(pdf), mimetype='application/pdf', as_attachment=True, download_name="todos_os_produtos.pdf")
+
+@app.route('/imprimir')
+@login_required
+def imprimir():
+    empresa = get_empresa()
+    return render_template('imprimir.html', empresa=empresa)
+
+
+
+
+    def update_pedidos_table():
+    conn = sqlite3.connect('db.sqlite3')
+    c = conn.cursor()
+
+    # Remover a tabela pedidos_backup se já existir
+    try:
+        c.execute('DROP TABLE IF EXISTS pedidos_backup')
+    except sqlite3.OperationalError as e:
+        print(f"Erro ao remover tabela pedidos_backup: {e}")
+
+    # Criar uma tabela temporária com a estrutura correta
+    c.execute('''
+        CREATE TABLE IF NOT EXISTS pedidos_temp (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            cliente TEXT NOT NULL,
+            telefone TEXT,
+            produto_id INTEGER NOT NULL,
+            descricao TEXT NOT NULL,
+            data_retirada_entrega TEXT NOT NULL,
+            tipo_entrega TEXT NOT NULL,
+            endereco_entrega TEXT,
+            status TEXT NOT NULL,
+            user_id INTEGER NOT NULL DEFAULT 1
+        )
+    ''')
+
+    # Copiar dados da tabela original para a tabela temporária, mas sem duplicar IDs
+    try:
+        c.execute('''
+            INSERT OR IGNORE INTO pedidos_temp (id, cliente, telefone, produto_id, descricao, data_retirada_entrega, tipo_entrega, endereco_entrega, status, user_id)
+            SELECT id, cliente, telefone, produto_id, descricao, data_retirada_entrega, tipo_entrega, endereco_entrega, status, user_id
+            FROM pedidos
+        ''')
+    except sqlite3.OperationalError as e:
+        print(f"Erro ao copiar dados: {e}")
+
+    # Renomear a tabela original e renomear a tabela temporária
+    try:
+        c.execute('ALTER TABLE pedidos RENAME TO pedidos_backup')
+        c.execute('ALTER TABLE pedidos_temp RENAME TO pedidos')
+    except sqlite3.OperationalError as e:
+        print(f"Erro ao renomear tabelas: {e}")
+
+    conn.commit()
+    conn.close()
+
+update_pedidos_table()
+
+
+
+
+alembic==1.14.0
+blinker==1.9.0
+chardet==5.2.0
+click==8.1.7
+Flask==3.1.0
+Flask-Migrate==4.0.7
+Flask-SQLAlchemy==3.1.1
+Flask-WTF==1.2.2
+itsdangerous==2.2.0
+Jinja2==3.1.4
+Mako==1.3.8
+MarkupSafe==3.0.2
+pillow==11.0.0
+reportlab==4.2.5
+SQLAlchemy==2.0.36
+typing_extensions==4.12.2
+Werkzeug==3.1.3
+WTForms==3.2.1
+
+
+
+
+
+
+
+
+{% extends "base.html" %}
+{% block title %}Editar Produto{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Editar Produto</h1>
+    <form method="POST" action="{{ url_for('editar_produto', produto_id=produto[0]) }}">
+        <div class="form-group">
+            <label for="nome">Nome do Produto</label>
+            <input type="text" class="form-control" name="nome" value="{{ produto[1] }}" required>
+        </div>
+        <div class="form-group">
+            <label for="descricao">Descrição</label>
+            <textarea class="form-control" name="descricao" required>{{ produto[2] }}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="preco">Preço</label>
+            <input type="number" step="0.01" class="form-control" name="preco" value="{{ produto[3] }}" required>
+        </div>
+        <div class="form-group">
+            <label for="ativo">Disponibilidade</label>
+            <select class="form-control" name="ativo" required>
+                <option value="1" {% if produto[4] == 1 %}selected{% endif %}>Disponível</option>
+                <option value="0" {% if produto[4] == 0 %}selected{% endif %}>Indisponível</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="obs">Observações</label>
+            <textarea class="form-control" name="obs">{{ produto[5] }}</textarea>
+        </div>
+        <button type="submit" class="btn btn-success">Salvar</button>
+    </form>
+</div>
+{% endblock %}

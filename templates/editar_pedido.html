@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Editar Pedido{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Editar Pedido</h1>
+    <form method="POST">
+        <div class="form-group">
+            <label for="cliente">Cliente</label>
+            <input type="text" class="form-control" id="cliente" name="cliente" value="{{ pedido[1] }}" required>
+        </div>
+        <div class="form-group">
+            <label for="telefone">Telefone</label>
+            <input type="text" class="form-control" id="telefone" name="telefone" value="{{ pedido[2] }}" required>
+        </div>
+        <div class="form-group">
+            <label for="produto_id">Produto</label>
+            <select class="form-control" id="produto_id" name="produto_id" required>
+                {% for produto in produtos %}
+                <option value="{{ produto[0] }}" {% if produto[0] == pedido[3] %}selected{% endif %}>{{ produto[1] }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="descricao">Descrição do Pedido</label>
+            <textarea class="form-control" id="descricao" name="descricao" rows="3" required>{{ pedido[4] }}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="data_retirada_entrega">Data Retirada/Entrega</label>
+            <input type="date" class="form-control" id="data_retirada_entrega" name="data_retirada_entrega" value="{{ pedido[5] }}" required>
+        </div>
+        <div class="form-group">
+            <label for="tipo_entrega">Tipo de Entrega</label>
+            <select class="form-control" id="tipo_entrega" name="tipo_entrega" required>
+                <option value="Retirada" {% if pedido[6] == 'Retirada' %}selected{% endif %}>Retirada</option>
+                <option value="Entrega" {% if pedido[6] == 'Entrega' %}selected{% endif %}>Entrega</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="endereco_entrega">Endereço de Entrega</label>
+            <input type="text" class="form-control" id="endereco_entrega" name="endereco_entrega" value="{{ pedido[7] }}">
+        </div>
+        <div class="form-group">
+            <label for="status">Status</label>
+            <select class="form-control" id="status" name="status" required>
+                <option value="Pendente" {% if pedido[8] == 'Pendente' %}selected{% endif %}>Pendente</option>
+                <option value="Concluído" {% if pedido[8] == 'Concluído' %}selected{% endif %}>Concluído</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="username">Usuário</label>
+            <input type="text" class="form-control" id="username" name="username" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Senha</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Salvar</button>
+    </form>
+</div>
+{% endblock %}

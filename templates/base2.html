@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Sistema de Controle de Pedidos{% endblock %}</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
+</head>
+<body>
+    <!-- Menu de Navegação -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="{{ url_for('index') }}">Sistema de Pedidos</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav"> <!--- Botao de menus--->
+                    <a class="nav-link" href="{{ url_for('add_pedido') }}">Fazer Pedido</a>
+                {% if 'user_id' in session %}
+                    <a class="nav-link" href="{{ url_for('add_empresa') }}">Empresa</a>
+                    <a class="nav-link" href="{{ url_for('pedidos_lista') }}">Pedidos</a>
+                    <a class="nav-link" href="{{ url_for('produtos_lista') }}">Produtos</a>
+                    <a class="nav-link" href="{{ url_for('cadastros') }}">Cadastrar produto</a>
+                    <a class="nav-link" href="{{ url_for('usuarios') }}">Usuários</a> <!-- Botão para a página de usuários -->
+                    <a class="nav-link" href="{{ url_for('imprimir') }}">Imprimir</a>                    
+                    <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+                {% else %}
+                    <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    <!-- Fim do Menu de Navegação -->
+
+    <div class="container mt-4">
+        {% block content %}{% endblock %}
+    </div>
+
+    {% block footer %}
+    <footer class="footer mt-auto py-3 bg-light">
+        <div class="container">
+            <span class="text-muted">© 2024 Sistema de Controle de Pedidos - Desenvolvido por lojaweb.com.br. Todos os direitos reservados.</span>
+        </div>
+    </footer>
+        {% endblock %}
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+
+

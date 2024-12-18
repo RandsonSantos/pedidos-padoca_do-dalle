@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Imprimir Dados{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Pesquisar Dados</h1>
+
+
+    <h2>Pesquisar Dados:</h2>
+    <form method="POST" action="{{ url_for('produtos') }}">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Pesquisar produtos" name="query">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="submit">Pesquisar Produtos</button>
+            </div>
+        </div>
+    </form>
+
+    <form method="POST" action="{{ url_for('pedidos') }}">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Pesquisar pedidos" name="query">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="submit">Pesquisar Pedidos</button>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
