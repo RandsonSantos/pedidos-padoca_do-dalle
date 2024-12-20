@@ -473,7 +473,7 @@ def before_request():
     if 'user_id' in session:
         now = datetime.now().timestamp()
         last_activity = session.get('last_activity', now)
-        if now - last_activity > 60:  # 1 minuto de inatividade
+        if now - last_activity > 3000:  # 5 minutos de inatividade
             return logout()
         session['last_activity'] = now
 
